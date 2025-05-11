@@ -4,6 +4,6 @@
  * @returns URL đầy đủ (VD: `http://localhost:3000/api/wallet`)
  */
 export function getServerApiUrl(endpoint: string) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
   return `${apiUrl}${endpoint}`;
 }
