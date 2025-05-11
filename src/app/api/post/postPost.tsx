@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Post from '@/app/models/Post';
 import cloudinary from '@/lib/cloudinary';
+import { revalidateTag } from 'next/cache';
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,7 +34,8 @@ export async function POST(req: NextRequest) {
       content: formData.get('content'),
       imageUrl,
     });
-
+    // Xóa cache sau khi tạo bài viết thành công
+    revalidateTag('posts');
     return NextResponse.json(
       {
         message: 'Tạo bài viết thành công!',

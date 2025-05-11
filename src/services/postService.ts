@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { IPost } from '@/types/type/post';
+import { getServerApiUrl } from '@/hooks/useApiUrl';
 
 interface ApiResponse<T> {
   message: string;
@@ -8,8 +9,16 @@ interface ApiResponse<T> {
 
 export const getAllPosts = async (): Promise<IPost[]> => {
   try {
-    const res = await axios.get<ApiResponse<IPost[]>>('/api/post');
-    return res.data.data;
+    const apiUrl = `${getServerApiUrl('/api/post')}`;
+
+    const res = await fetch(apiUrl, {
+      next: { revalidate: 60, tags: ['posts'] },
+    });
+
+    if (!res.ok) throw new Error('Failed to fetch posts');
+
+    const json: ApiResponse<IPost[]> = await res.json();
+    return json.data;
   } catch (err) {
     console.error('Lỗi khi lấy danh sách bài viết:', err);
     throw new Error('Không thể lấy danh sách bài viết');

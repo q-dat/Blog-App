@@ -1,5 +1,6 @@
 import Post from '@/app/models/Post';
 import { connectDB } from '@/lib/mongodb';
+import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -11,7 +12,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (!optionCosmetic) {
       return NextResponse.json({ success: false, error: 'Bài viết không tồn tại!' }, { status: 404 });
     }
-
+    // Xóa cache sau khi tạo bài viết thành công
+    revalidateTag('posts');
     return NextResponse.json({ success: true, data: optionCosmetic });
   } catch (error) {
     console.error('Lỗi:', error);

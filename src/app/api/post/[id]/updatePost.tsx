@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Post from '@/app/models/Post';
 import { uploadToCloudinary } from '@/lib/cloudinary';
+import { revalidateTag } from 'next/cache';
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -34,7 +35,8 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
       },
       { new: true }
     ).lean();
-
+    // Xóa cache sau khi tạo bài viết thành công
+    revalidateTag('posts');
     return NextResponse.json({
       message: 'Cập nhật bài viết thành công!',
       success: true,
