@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRef, useMemo } from "react";
-import dynamic from "next/dynamic";
+import { useRef, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 
-const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
+const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
 interface Props {
   value: string;
@@ -20,31 +20,31 @@ export default function JoditEditorWrapper({ value, onChange }: Props) {
       toolbarSticky: false,
       height: 300,
       buttons: [
-        "source",
-        "|",
-        "font",
-        "fontsize",
-        "bold",
-        "italic",
-        "underline",
-        "|",
-        "brush",
-        "paragraph",
-        "align",
-        "|",
-        "ul",
-        "ol",
-        "outdent",
-        "indent",
-        "|",
-        "link",
-        "image",
-        "video",
-        "|",
-        "hr",
-        "undo",
-        "redo",
-        "eraser",
+        'source',
+        '|',
+        'font',
+        'fontsize',
+        'bold',
+        'italic',
+        'underline',
+        '|',
+        'brush',
+        'paragraph',
+        'align',
+        '|',
+        'ul',
+        'ol',
+        'outdent',
+        'indent',
+        '|',
+        'link',
+        'image',
+        'video',
+        '|',
+        'hr',
+        'undo',
+        'redo',
+        'eraser',
       ],
       style: {
         font: true,
@@ -56,12 +56,12 @@ export default function JoditEditorWrapper({ value, onChange }: Props) {
       controls: {
         font: {
           list: {
-            Arial: "Arial",
-            Georgia: "Georgia",
-            Impact: "Impact",
-            Tahoma: "Tahoma",
-            "Times New Roman": "Times New Roman",
-            Verdana: "Verdana",
+            Arial: 'Arial',
+            Georgia: 'Georgia',
+            Impact: 'Impact',
+            Tahoma: 'Tahoma',
+            'Times New Roman': 'Times New Roman',
+            Verdana: 'Verdana',
           },
         },
       },
@@ -69,12 +69,5 @@ export default function JoditEditorWrapper({ value, onChange }: Props) {
     []
   );
 
-  return (
-    <JoditEditor
-      ref={editor}
-      value={value}
-      config={config}
-      onBlur={(newContent) => onChange(newContent)}
-    />
-  );
+  return <JoditEditor ref={editor} value={value} config={config} onBlur={(newContent) => onChange(newContent)} />;
 }

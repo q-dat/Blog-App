@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IPostCatalogDocument extends Document {
   _id: mongoose.Types.ObjectId;
@@ -12,5 +12,4 @@ const PostCatalogSchema: Schema = new Schema<IPostCatalogDocument>(
   { timestamps: true }
 );
 
-export default mongoose.models.PostCatalog ||
-  mongoose.model<IPostCatalogDocument>("PostCatalog", PostCatalogSchema);
+export default mongoose.models.PostCatalog || mongoose.model<IPostCatalogDocument>('PostCatalog', PostCatalogSchema);
