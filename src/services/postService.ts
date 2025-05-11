@@ -12,6 +12,7 @@ export const getAllPosts = async (): Promise<IPost[]> => {
     const apiUrl = `${getServerApiUrl('/api/post')}`;
 
     const res = await fetch(apiUrl, {
+      cache: 'force-cache',
       next: { revalidate: 60, tags: ['posts'] },
     });
 
