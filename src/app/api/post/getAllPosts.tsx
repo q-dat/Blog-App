@@ -14,10 +14,7 @@ export async function GET() {
         data: posts,
       },
       {
-        status: 200,
-        headers: {
-          'Cache-Control': 's-maxage=3600, stale-while-revalidate=1800',
-        },
+        status: 200
       }
     );
   } catch (error) {
