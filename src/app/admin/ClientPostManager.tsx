@@ -228,6 +228,13 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
     }
   };
 
+  // decodeHTML
+  function decodeHTML(html: string): string {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  }
+
   return (
     <div className="flex flex-col p-2 xl:flex-row xl:gap-6">
       {/* Danh sách tài liệu */}
@@ -286,7 +293,7 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
 
                     {/* Nội dung */}
                     <td className="max-w-[400px] px-4 py-3 text-sm text-gray-700">
-                      <span className="line-clamp-3">{post.content.replace(/<[^>]*>/g, '')}</span>
+                      <span className="line-clamp-3">{decodeHTML(post.content.replace(/<[^>]*>/g, ''))}</span>
                     </td>
 
                     {/* Ngày tạo */}

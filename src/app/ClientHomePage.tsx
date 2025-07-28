@@ -37,6 +37,7 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
     return found ? found.name.charAt(0).toUpperCase() + found.name.slice(1) : 'Không rõ';
   };
 
+  // decodeHTML
   function decodeHTML(html: string): string {
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
