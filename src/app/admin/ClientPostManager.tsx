@@ -33,6 +33,13 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
   const [loadingSubmit, setLoadingSubmit] = useState({ post: false, catalog: false });
   const [editorValue, setEditorValue] = useState('');
   const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
+  const handleOpenPostModal = (post: IPost) => {
+    setSelectedPost(post);
+  };
+  const handleClosePostModal = () => {
+    setSelectedPost(null);
+  };
 
   const watchImages = watch('imageUrl');
 
@@ -241,14 +248,15 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                   <th className="px-4 py-2 text-left font-semibold text-gray-700">Tiêu đề</th>
                   <th className="px-4 py-2 text-left font-semibold text-gray-700">Danh mục</th>
                   <th className="px-4 py-2 text-left font-semibold text-gray-700">Nội dung</th>
-                  <th className="px-4 py-2 text-left font-semibold text-gray-700">Ngày tạo</th>
-                  <th className="px-4 py-2 text-left font-semibold text-gray-700">Ngày cập nhật</th>
+                  {/* <th className="px-4 py-2 text-left font-semibold text-gray-700">Ngày tạo</th>
+                  <th className="px-4 py-2 text-left font-semibold text-gray-700">Ngày cập nhật</th> */}
                   <th className="px-4 py-2 text-center font-semibold text-gray-700">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {posts.map((post) => (
                   <tr key={post._id}>
+                    {/* Hình ảnh */}
                     <td className="px-4 py-2">
                       {post.imageUrl ? (
                         <Image src={post.imageUrl} alt="Hình bài viết" width={40} height={40} className="rounded-md object-cover" />
@@ -256,15 +264,42 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                         'Không có ảnh'
                       )}
                     </td>
-                    <td className="px-4 py-2">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</td>
+                    {/* Tiêu đề */}
+                    <td className="line-clamp-2 px-4 py-2 text-2xl font-bold">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</td>
+                    {/* Danh mục */}
                     <td className="px-4 py-2">{postCatalogs.find((cat) => cat._id === post.post_catalog_id)?.name || 'N/A'}</td>
-                    <td className="line-clamp-2 px-4 py-2">
-                      <div dangerouslySetInnerHTML={{ __html: post.content || 'N/A' }} />
+                    {/* Nội dung */}
+                    <td className="max-h-[200px] max-w-[200px] px-4 py-2 align-top">
+                      <div className="line-clamp-2 overflow-hidden break-words text-sm" dangerouslySetInnerHTML={{ __html: post.content || 'N/A' }} />
                     </td>
-                    <td className="px-4 py-2">{new Date(post.createdAt).toLocaleDateString()}</td>
-                    <td className="px-4 py-2">{new Date(post.updatedAt).toLocaleDateString()}</td>
+                    {/* Modal */}
+                    {selectedPost && (
+                      <div
+                        className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-black bg-opacity-50"
+                        onClick={handleClosePostModal}
+                      >
+                        <div className="w-5/6">
+                          <button onClick={handleClosePostModal} className="float-end bg-red-500 px-4 py-2 text-2xl text-white hover:text-gray-800">
+                            ×
+                          </button>
+                        </div>
+                        <div className="h-5/6 w-5/6 cursor-default overflow-y-auto bg-white p-2 shadow-lg" onClick={(e) => e.stopPropagation()}>
+                          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
+                        </div>
+                      </div>
+                    )}
+                    {/* Ngày tạo */}
+                    {/* <td className="px-4 py-2">{new Date(post.createdAt).toLocaleDateString()}</td> */}
+                    {/* Ngày cập nhật */}
+                    {/* <td className="px-4 py-2">{new Date(post.updatedAt).toLocaleDateString()}</td> */}
+                    {/* Thao tác */}
                     <td className="px-4 py-2 text-center">
                       <div className="flex justify-center gap-2">
+                        {post.content && (
+                          <button onClick={() => handleOpenPostModal(post)} className="rounded-md bg-black px-3 py-1 text-white hover:bg-black">
+                            Xem
+                          </button>
+                        )}
                         <button onClick={() => handleEditPost(post)} className="rounded-md bg-green-500 px-3 py-1 text-white hover:bg-green-600">
                           Sửa
                         </button>
