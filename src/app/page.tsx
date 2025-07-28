@@ -1,3 +1,12 @@
-export default function Home() {
-  return <h1 className="bg-black text-3xl font-bold text-red-500 underline">Hello world!</h1>;
+import { getAllPosts } from '@/services/postService';
+import ClientHomePage from './ClientHomePage';
+
+export default async function Home() {
+  const initialPosts = await getAllPosts();
+
+  return (
+    <div className="container mx-auto p-6">
+      <ClientHomePage initialPosts={initialPosts} />
+    </div>
+  );
 }
