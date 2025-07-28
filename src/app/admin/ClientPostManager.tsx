@@ -265,25 +265,51 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                       )}
                     </td>
                     {/* Tiêu đề */}
-                    <td className="line-clamp-2 px-4 py-2 text-2xl font-bold">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
+                        <span className="text-base font-semibold text-black xl:text-2xl">
+                          {post.title.charAt(0).toUpperCase() + post.title.slice(1)}
+                        </span>
+                        {post.content && (
+                          <button
+                            onClick={() => handleOpenPostModal(post)}
+                            className="w-fit rounded-md bg-black px-3 py-1 text-sm font-medium text-white transition"
+                          >
+                            Xem
+                          </button>
+                        )}
+                      </div>
+                    </td>
+
                     {/* Danh mục */}
                     <td className="px-4 py-2">{postCatalogs.find((cat) => cat._id === post.post_catalog_id)?.name || 'N/A'}</td>
                     {/* Nội dung */}
                     <td className="max-h-[200px] max-w-[200px] px-4 py-2 align-top">
                       <div className="line-clamp-2 overflow-hidden break-words text-sm" dangerouslySetInnerHTML={{ __html: post.content || 'N/A' }} />
                     </td>
-                    {/* Modal */}
+                    {/* Bài viết chi tiết */}
                     {selectedPost && (
                       <div
-                        className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-black bg-opacity-50"
+                        className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-black bg-opacity-50 p-2 xl:p-0"
                         onClick={handleClosePostModal}
                       >
-                        <div className="w-5/6">
-                          <button onClick={handleClosePostModal} className="float-end bg-red-500 px-4 py-2 text-2xl text-white hover:text-gray-800">
-                            ×
-                          </button>
+                        <div className="flex w-full flex-row items-end justify-between xl:w-5/6">
+                          <div className="break-words bg-black p-2 text-sm text-white xl:text-2xl">
+                            {selectedPost.title.charAt(0).toUpperCase() + selectedPost.title.slice(1)}
+                          </div>
+                          <div>
+                            <button
+                              onClick={handleClosePostModal}
+                              className="bg-red-500 px-5 py-3 text-2xl text-white hover:text-gray-800 xl:px-4 xl:py-2"
+                            >
+                              ×
+                            </button>
+                          </div>
                         </div>
-                        <div className="h-5/6 w-5/6 cursor-default overflow-y-auto bg-white p-2 shadow-lg" onClick={(e) => e.stopPropagation()}>
+                        <div
+                          className="h-full w-full cursor-default overflow-y-auto border-[8px] border-white bg-white shadow-lg xl:h-5/6 xl:w-5/6"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
                         </div>
                       </div>
@@ -295,11 +321,6 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                     {/* Thao tác */}
                     <td className="px-4 py-2 text-center">
                       <div className="flex justify-center gap-2">
-                        {post.content && (
-                          <button onClick={() => handleOpenPostModal(post)} className="rounded-md bg-black px-3 py-1 text-white hover:bg-black">
-                            Xem
-                          </button>
-                        )}
                         <button onClick={() => handleEditPost(post)} className="rounded-md bg-green-500 px-3 py-1 text-white hover:bg-green-600">
                           Sửa
                         </button>
@@ -381,8 +402,11 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
 
         {/* Modal quản lý danh mục */}
         {isCatalogModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={handleOverlayClick}>
-            <div className="w-full max-w-md rounded-xl bg-white p-6">
+          <div
+            className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black bg-opacity-50 p-2 xl:p-0"
+            onClick={handleOverlayClick}
+          >
+            <div className="w-full max-w-md cursor-default rounded-xl bg-white p-6" onClick={(e) => e.stopPropagation()}>
               <h3 className="mb-4 text-xl font-bold text-gray-800">Quản lý danh mục</h3>
               {/* Form thêm/sửa danh mục */}
               <form onSubmit={handleCatalogSubmit(onCatalogSubmit)} className="mb-4 space-y-4">
