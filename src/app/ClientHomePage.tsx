@@ -39,6 +39,7 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
 
   // decodeHTML
   function decodeHTML(html: string): string {
+    if (typeof window === 'undefined') return html; // SSR: bỏ qua decode
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
