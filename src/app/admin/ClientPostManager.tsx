@@ -55,9 +55,9 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
         const res = await getAllPosts();
         setPosts(res);
       } catch (err) {
-        console.error('Lỗi tải bài viết:', err);
-        setError((prev) => ({ ...prev, posts: 'Không thể tải bài viết' }));
-        Toastify('Tải bài viết thất bại!', 500);
+        console.error('Lỗi tải tài liệu:', err);
+        setError((prev) => ({ ...prev, posts: 'Không thể tải tài liệu' }));
+        Toastify('Tải tài liệu thất bại!', 500);
       } finally {
         setLoading((prev) => ({ ...prev, posts: false }));
       }
@@ -120,17 +120,17 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
         post = await updatePost(editingPost._id, formData);
         setPosts(posts.map((p) => (p._id === editingPost._id ? post : p)));
         setEditingPost(null);
-        Toastify('Cập nhật bài viết thành công!', 200);
+        Toastify('Cập nhật tài liệu thành công!', 200);
       } else {
         post = await createPost(formData);
         setPosts([...posts, post]);
-        Toastify('Tạo bài viết thành công!', 201);
+        Toastify('Tạo tài liệu thành công!', 201);
       }
 
       resetPost();
       setEditorValue('');
     } catch (err) {
-      console.error('Lỗi lưu bài viết:', err);
+      console.error('Lỗi lưu tài liệu:', err);
       Toastify('Đã xảy ra lỗi!', 500);
     } finally {
       setLoadingSubmit((prev) => ({ ...prev, post: false }));
@@ -166,13 +166,13 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
 
   // Delete post
   const handleDeletePost = async (id: string) => {
-    if (confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) {
+    if (confirm('Bạn có chắc chắn muốn xóa tài liệu này không?')) {
       try {
         await deletePost(id);
         setPosts(posts.filter((p) => p._id !== id));
-        Toastify('Xóa bài viết thành công!', 200);
+        Toastify('Xóa tài liệu thành công!', 200);
       } catch (err) {
-        console.error('Lỗi xóa bài viết:', err);
+        console.error('Lỗi xóa tài liệu:', err);
         Toastify('Đã xảy ra lỗi!', 500);
       }
     }
@@ -230,15 +230,15 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
 
   return (
     <div className="flex flex-col p-2 xl:flex-row xl:gap-6">
-      {/* Danh sách bài viết */}
+      {/* Danh sách tài liệu */}
       <div className="mt-6 w-full xl:mt-0 xl:w-2/3">
-        <h3 className="mb-4 text-xl font-bold text-gray-800">Danh sách bài viết</h3>
+        <h3 className="mb-4 text-xl font-bold text-gray-800">Danh sách tài liệu</h3>
         {loading.posts ? (
           <p>Đang tải...</p>
         ) : error.posts ? (
           <p className="text-red-500">{error.posts}</p>
         ) : posts.length === 0 ? (
-          <p>Không có bài viết nào.</p>
+          <p>Không có tài liệu nào.</p>
         ) : (
           <div className="overflow-x-auto rounded-lg border shadow">
             <table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -259,21 +259,19 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                     {/* Hình ảnh */}
                     <td className="px-4 py-2">
                       {post.imageUrl ? (
-                        <Image src={post.imageUrl} alt="Hình bài viết" width={40} height={40} className="rounded-md object-cover" />
+                        <Image src={post.imageUrl} alt="Hình tài liệu" width={40} height={40} className="rounded-md object-cover" />
                       ) : (
                         'Không có ảnh'
                       )}
                     </td>
                     {/* Tiêu đề */}
-                    <td className="px-4 py-3">
+                    <td className="w-full max-w-[300px] px-4 py-3">
                       <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
-                        <span className="text-base font-semibold text-black xl:text-2xl">
-                          {post.title.charAt(0).toUpperCase() + post.title.slice(1)}
-                        </span>
+                        <span className="text-base font-semibold text-gray-900">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</span>
                         {post.content && (
                           <button
                             onClick={() => handleOpenPostModal(post)}
-                            className="w-fit rounded-md bg-black px-3 py-1 text-sm font-medium text-white transition"
+                            className="mt-1 w-fit rounded-md bg-black px-3 py-1 text-xs font-medium text-white transition hover:bg-gray-800 xl:mt-0"
                           >
                             Xem
                           </button>
@@ -282,38 +280,15 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                     </td>
 
                     {/* Danh mục */}
-                    <td className="px-4 py-2">{postCatalogs.find((cat) => cat._id === post.post_catalog_id)?.name || 'N/A'}</td>
-                    {/* Nội dung */}
-                    <td className="max-h-[200px] max-w-[200px] px-4 py-2 align-top">
-                      <div className="line-clamp-2 overflow-hidden break-words text-sm" dangerouslySetInnerHTML={{ __html: post.content || 'N/A' }} />
+                    <td className="min-w-[150px] px-4 py-3 text-sm text-gray-700">
+                      <mark> {postCatalogs.find((cat) => cat._id === post.post_catalog_id)?.name || 'N/A'}</mark>
                     </td>
-                    {/* Bài viết chi tiết */}
-                    {selectedPost && (
-                      <div
-                        className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-black bg-opacity-50 p-2 xl:p-0"
-                        onClick={handleClosePostModal}
-                      >
-                        <div className="flex w-full flex-row items-end justify-between xl:w-5/6">
-                          <div className="break-words bg-black p-2 text-sm text-white xl:text-2xl">
-                            {selectedPost.title.charAt(0).toUpperCase() + selectedPost.title.slice(1)}
-                          </div>
-                          <div>
-                            <button
-                              onClick={handleClosePostModal}
-                              className="bg-red-500 px-5 py-3 text-2xl text-white hover:text-gray-800 xl:px-4 xl:py-2"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        </div>
-                        <div
-                          className="h-full w-full cursor-default overflow-y-auto border-[8px] border-white bg-white shadow-lg xl:h-5/6 xl:w-5/6"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
-                        </div>
-                      </div>
-                    )}
+
+                    {/* Nội dung */}
+                    <td className="max-w-[400px] px-4 py-3 text-sm text-gray-700">
+                      <span className="line-clamp-3">{post.content.replace(/<[^>]*>/g, '')}</span>
+                    </td>
+
                     {/* Ngày tạo */}
                     {/* <td className="px-4 py-2">{new Date(post.createdAt).toLocaleDateString()}</td> */}
                     {/* Ngày cập nhật */}
@@ -333,13 +308,37 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                 ))}
               </tbody>
             </table>
+            {/* tài liệu chi tiết */}
+            {selectedPost && (
+              <div
+                className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-black bg-opacity-50 p-2 xl:p-0"
+                onClick={handleClosePostModal}
+              >
+                <div className="flex w-full flex-row items-end justify-between xl:w-5/6">
+                  <div className="break-words bg-black p-2 text-sm text-white xl:text-2xl">
+                    {selectedPost.title.charAt(0).toUpperCase() + selectedPost.title.slice(1)}
+                  </div>
+                  <div>
+                    <button onClick={handleClosePostModal} className="bg-red-500 px-5 py-3 text-2xl text-white hover:text-gray-800 xl:px-4 xl:py-2">
+                      ×
+                    </button>
+                  </div>
+                </div>
+                <div
+                  className="h-full w-full cursor-default overflow-y-auto border-[8px] border-white bg-white shadow-lg xl:h-5/6 xl:w-5/6"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      {/* Form bài viết và quản lý danh mục */}
+      {/* Form tài liệu và quản lý danh mục */}
       <div className="w-full rounded-xl bg-white p-4 shadow xl:w-1/3">
-        <h2 className="mb-4 text-xl font-bold text-gray-800">{editingPost ? 'Chỉnh sửa bài viết' : 'Tạo bài viết mới'}</h2>
+        <h2 className="mb-4 text-xl font-bold text-gray-800">{editingPost ? 'Chỉnh sửa tài liệu' : 'Tạo tài liệu mới'}</h2>
         <form onSubmit={handlePostSubmit(onPostSubmit)} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-700">Tiêu đề *</label>

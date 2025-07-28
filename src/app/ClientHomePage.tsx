@@ -1,9 +1,10 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { IPost } from '@/types/type/post';
 import { IPostCatalog } from '@/types/type/post-catalog';
 import { getAllPostCatalogs } from '@/services/postCatalogService';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface ClientPostManagerProps {
   initialPosts: IPost[];
@@ -36,17 +37,37 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
     return found ? found.name.charAt(0).toUpperCase() + found.name.slice(1) : 'Không rõ';
   };
 
+  function decodeHTML(html: string): string {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  }
+
   return (
-    <div className="">
-      <h1 className="text-2xl font-bold text-gray-800">Danh sách bài viết</h1>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="w-full p-2 xl:p-10">
+      <div className="my-4">
+        <h1 className="w-full">
+          <span className="text-3xl font-bold">Tài Liệu Học Tập - Fullstack Developer 2025 (Nguồn: Sưu tầm)</span> <br />
+          <i className="text-xl font-semibold">Tác giả: Điểu Quốc Đạt</i>
+        </h1>
+        <p className="text-xl">
+          <span className="font-semibold">Github:</span>
+          <i className="text-blue-500">
+            <Link target="_blank" href={'https://github.com/q-dat'}>
+              &nbsp; https://github.com/q-dat
+            </Link>
+          </i>
+        </p>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {initialPosts.map((post) => (
-          <div key={post._id} className="overflow-hidden rounded-lg border bg-white shadow transition hover:shadow-md">
-            <img src={post.imageUrl || '/placeholder.jpg'} alt={post.title} className="h-48 w-full object-cover" />
-            <div className="space-y-2 p-4">
-              <h2 className="truncate text-lg font-semibold text-gray-900">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</h2>
-              <p className="text-sm text-gray-500">Danh mục: {getCatalogNameById(post.post_catalog_id)}</p>
-              <p className="line-clamp-3 text-sm text-gray-600">{post.content.replace(/<[^>]*>/g, '').slice(0, 150)}...</p>
+          <div key={post._id} className="overflow-hidden rounded-sm border bg-white shadow transition hover:shadow-md">
+            <Image width={350} height={350} src={post.imageUrl || '/fallback.jpg'} alt={post.title} className="h-[350px] w-full object-cover" />
+            <div className="space-y-1 p-4">
+              <p className="text-sm font-bold text-black">Danh mục: {getCatalogNameById(post.post_catalog_id)}</p>
+              <h2 className="truncate text-xl font-semibold text-gray-900">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</h2>
+              <p className="line-clamp-3 text-sm text-gray-600">{decodeHTML(post.content.replace(/<[^>]*>/g, ''))}</p>
+              {/* Xem chi tiết */}
               <button
                 onClick={() => handleOpenPostModal(post)}
                 className="mt-2 inline-block rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"

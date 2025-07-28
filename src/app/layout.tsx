@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Blog App',
-  description: 'Blog App',
+  title: 'Tài Liệu Học Tập: Fullstack Developer',
+  description: 'Tài Liệu Học Tập: Fullstack Developer',
 };
 
 export default function RootLayout({
