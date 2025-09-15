@@ -11,10 +11,7 @@ export const getAllPosts = async (): Promise<IPost[]> => {
   try {
     const apiUrl = `${getServerApiUrl('/api/post')}`;
 
-    const res = await fetch(apiUrl, {
-      cache: 'force-cache',
-      next: { revalidate: 60, tags: ['posts'] },
-    });
+    const res = await fetch(apiUrl);
 
     if (!res.ok) throw new Error('Failed to fetch posts');
 
