@@ -84,7 +84,7 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
     if (editingPost) {
       setEditorValue(editingPost.content || '');
       setPostValue('title', editingPost.title);
-      setPostValue('post_catalog_id', editingPost.post_catalog_id);
+      setPostValue('post_catalog_id', editingPost.post_catalog_id._id);
     } else {
       setEditorValue('');
       resetPost();
@@ -196,7 +196,7 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
   const handleEditPost = (post: IPost) => {
     setEditingPost(post);
     setPostValue('title', post.title);
-    setPostValue('post_catalog_id', post.post_catalog_id);
+    setPostValue('post_catalog_id', post.post_catalog_id._id);
     setEditorValue(post.content || '');
   };
 
@@ -227,14 +227,6 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
       handleCancelEditCatalog();
     }
   };
-
-  // decodeHTML
-  function decodeHTML(html: string): string {
-    if (typeof window === 'undefined') return html; // SSR: bỏ qua decode
-    const txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
-  }
 
   return (
     <div className="flex flex-col p-2 xl:flex-row xl:gap-6">
@@ -289,12 +281,12 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
 
                     {/* Danh mục */}
                     <td className="min-w-[150px] px-4 py-3 text-sm text-gray-700">
-                      <mark> {postCatalogs.find((cat) => cat._id === post.post_catalog_id)?.name || 'N/A'}</mark>
+                      <mark> {postCatalogs.find((cat) => cat._id === post.post_catalog_id._id)?.name || 'N/A'}</mark>
                     </td>
 
                     {/* Nội dung */}
                     <td className="max-w-[400px] px-4 py-3 text-sm text-gray-700">
-                      <span className="line-clamp-3">{decodeHTML(post.content.replace(/<[^>]*>/g, ''))}</span>
+                      <span className="line-clamp-3" dangerouslySetInnerHTML={{ __html: post.content.replace(/<[^>]*>/g, '') }} />
                     </td>
 
                     {/* Ngày tạo */}

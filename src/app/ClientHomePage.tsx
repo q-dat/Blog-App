@@ -1,8 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { IPost } from '@/types/type/post';
-import { IPostCatalog } from '@/types/type/post-catalog';
-import { getAllPostCatalogs } from '@/services/postCatalogService';
 import Image from 'next/image';
 import Link from 'next/link';
 import { images } from '../../public/images';
@@ -15,7 +13,6 @@ interface ClientPostManagerProps {
 export default function ClientHomePage({ initialPosts }: ClientPostManagerProps) {
   const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
   const [showDonateModal, setShowDonateModal] = useState(false);
-  const [postCatalogs, setPostCatalogs] = useState<IPostCatalog[]>([]);
   // Post modal
   const handleOpenPostModal = (post: IPost) => setSelectedPost(post);
 
@@ -27,14 +24,6 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
 
   // useEffect chỉ quản lý ESC
   useEffect(() => {
-    const fetchCatalogs = async () => {
-      try {
-        const catalogs = await getAllPostCatalogs();
-        setPostCatalogs(catalogs);
-      } catch (err) {
-        console.error('Lỗi tải danh mục:', err);
-      }
-    };
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (selectedPost) handleClosePostModal();
@@ -42,15 +31,8 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
       }
     };
     window.addEventListener('keydown', handleEsc);
-    fetchCatalogs();
     return () => window.removeEventListener('keydown', handleEsc);
   }, [selectedPost, showDonateModal]);
-
-  // Hàm lấy tên danh mục theo ID
-  const getCatalogNameById = (id: string) => {
-    const found = postCatalogs.find((cat) => cat._id === id);
-    return found ? found.name.charAt(0).toUpperCase() + found.name.slice(1) : 'Không rõ';
-  };
 
   return (
     <div className="w-full p-2 xl:p-10">
@@ -120,7 +102,7 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
           >
             <Image width={300} height={300} src={post.imageUrl || images.FallBack} alt={post.title} className="h-[300px] w-full object-cover" />
             <div className="space-y-1 p-4">
-              <p className="text-sm font-bold text-black">Danh mục: {getCatalogNameById(post.post_catalog_id)}</p>
+              <p className="text-sm font-bold text-black">Danh mục: {post.post_catalog_id.name}</p>
               <h2 className="truncate text-xl font-semibold text-gray-900">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</h2>
               <div className="line-clamp-3 text-gray-600" dangerouslySetInnerHTML={{ __html: post.content.replace(/<[^>]*>/g, '') }} />
             </div>
