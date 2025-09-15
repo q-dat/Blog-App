@@ -6,7 +6,7 @@ import { getAllPostCatalogs } from '@/services/postCatalogService';
 import Image from 'next/image';
 import Link from 'next/link';
 import { images } from '../../public/images';
-import { GiPiggyBank } from 'react-icons/gi';
+import { TbMilkshake } from 'react-icons/tb';
 
 interface ClientPostManagerProps {
   initialPosts: IPost[];
@@ -74,7 +74,7 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
           onClick={toggleDonateModal}
           className="inline-flex transform cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-yellow-400 via-red-400 to-pink-500 px-4 py-2 text-xl font-semibold uppercase text-black shadow-lg transition hover:scale-105 hover:shadow-2xl"
         >
-          Quyên góp trà sữa <GiPiggyBank className="mx-1 text-2xl text-black" />
+          Quyên góp trà sữa <TbMilkshake className="mx-1 text-black" />
         </div>
 
         {/* Modal QR Donation */}
@@ -88,18 +88,18 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="inline-flex items-center justify-center bg-gradient-to-r from-yellow-400 via-red-400 to-pink-500 bg-clip-text text-center text-2xl font-extrabold uppercase text-transparent drop-shadow-lg xl:text-4xl">
-                Quyên góp trà sữa <GiPiggyBank className="mx-1 text-2xl text-black xl:text-4xl" />
+                Quyên góp trà sữa <TbMilkshake className="mx-1 text-black" />
               </h2>
               <Image src={images.QRACB} width={400} height={400} className="h-4/5 w-4/5 xl:h-[400px] xl:w-[400px]" alt="QR ACB Dieu Quoc Dat" />
               <p className="text-center text-lg font-bold">ACB - Dieu Quoc Dat - 30365767</p>
               <div className="rounded-lg bg-pink-50 p-4 text-center shadow-md">
-                <p className="text-base text-black">
+                <div className="text-base text-black">
                   <p>💖 Cảm ơn các tình yêu! 💖</p>
                   <p>
                     Cảm ơn bạn đã ủng hộ trà sữa cho dự án. Mọi đóng góp đều giúp tôi “nạp năng lượng” để học tập và phát triển dự án, mang lại nhiều
                     giá trị hơn cho cộng đồng. ☕🚀
                   </p>
-                </p>
+                </div>
               </div>
               <button
                 onClick={() => setShowDonateModal(false)}
@@ -134,18 +134,21 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
           className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-black/60 p-2 xl:p-0"
           onClick={handleClosePostModal}
         >
-          <div className="flex w-full flex-row items-end justify-between xl:w-[90%]">
+          <div className="flex w-full flex-row items-end justify-between">
             <div className="break-words bg-black p-2 text-sm text-white xl:text-2xl">
               {selectedPost.title.charAt(0).toUpperCase() + selectedPost.title.slice(1)}
             </div>
-            <div>
-              <button onClick={handleClosePostModal} className="bg-red-500 px-5 py-3 text-2xl text-white hover:text-gray-800 xl:px-4 xl:py-2">
-                ESC / Đóng
-              </button>
-            </div>
+            {/*  */}
+            <button
+              onClick={handleClosePostModal}
+              className="bg-red-500 px-5 py-3 text-xl text-white hover:text-gray-800 xl:px-4 xl:py-2 xl:text-2xl"
+            >
+              <span className="hidden xl:block">ESC / Đóng</span>
+              <span className="block xl:hidden">Đóng</span>
+            </button>
           </div>
           <div
-            className="h-full w-full cursor-default overflow-y-auto border-[8px] border-white bg-white shadow-lg xl:h-[90%] xl:w-[90%]"
+            className="h-full w-full cursor-default overflow-auto border-[8px] border-white bg-white shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: selectedPost.content }} />
