@@ -1,4 +1,4 @@
 export const images = {
-QRACB: '/images/QRACB.jpg',
+QRACB: '/images/qrACB.jpg',
 FallBack:'/images/fallback.jpg',
 }
