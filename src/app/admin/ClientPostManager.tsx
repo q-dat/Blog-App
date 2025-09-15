@@ -328,7 +328,7 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                   </div>
                   <div>
                     <button onClick={handleClosePostModal} className="bg-red-500 px-5 py-3 text-2xl text-white hover:text-gray-800 xl:px-4 xl:py-2">
-                      ×
+                      x
                     </button>
                   </div>
                 </div>
