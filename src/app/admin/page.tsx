@@ -1,16 +1,9 @@
-// export const revalidate = 60;
-// import React from 'react';
-// import ClientPostManager from './ClientPostManager';
-// import { getAllPosts } from '@/services/postService';
+export const revalidate = 60;
+import React from 'react';
+import ClientPostManager from './ClientPostManager';
+import { getAllPosts } from '@/services/postService';
 
-// export default async function PostManager() {
-//   const initialPosts = await getAllPosts();
-//   return <ClientPostManager initialPosts={initialPosts} />;
-// }
-import React from 'react'
-
-export default function page() {
-  return (
-    <div>page</div>
-  )
+export default async function PostManager() {
+  const initialPosts = await getAllPosts();
+  return <ClientPostManager initialPosts={initialPosts} />;
 }
