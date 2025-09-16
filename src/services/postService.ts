@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { IPost } from '@/types/type/post';
-import { getServerApiUrl } from '@/hooks/useApiUrl';
 
 interface ApiResponse<T> {
   message: string;
@@ -9,17 +8,11 @@ interface ApiResponse<T> {
 
 export const getAllPosts = async (): Promise<IPost[]> => {
   try {
-    const apiUrl = `${getServerApiUrl('/api/post')}`;
-
-    const res = await fetch(apiUrl);
-
-    if (!res.ok) throw new Error('Failed to fetch posts');
-
-    const json: ApiResponse<IPost[]> = await res.json();
-    return json.data;
+    const res = await axios.get('/api/post-catalog');
+    return res.data.data;
   } catch (err) {
-    console.error('Lỗi khi lấy danh sách bài viết:', err);
-    throw new Error('Không thể lấy danh sách bài viết');
+    console.error('Lỗi khi lấy danh sách:', err);
+    throw new Error('Không thể lấy danh sách');
   }
 };
 

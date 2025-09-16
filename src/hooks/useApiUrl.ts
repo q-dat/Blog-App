@@ -1,19 +1,9 @@
 /**
- * Tạo full API URL không cần dùng biến môi trường
- * @param endpoint Đường dẫn API (VD: `/api/post`)
+ * Lấy API URL từ biến môi trường, không dùng headers() để tối ưu SSR
+ * @param endpoint Đường dẫn API (VD: `/api/wallet`)
+ * @returns URL đầy đủ (VD: `http://localhost:3000/api/wallet`)
  */
 export function getServerApiUrl(endpoint: string) {
-  if (typeof window !== 'undefined') {
-    // client side: dùng domain hiện tại
-    return `${window.location.origin}${endpoint}`;
-  }
-
-  // server side: chạy trên Vercel hoặc local
-  const vercelUrl = process.env.VERCEL_URL;
-  if (vercelUrl) {
-    return `https://${vercelUrl}${endpoint}`;
-  }
-
-  // fallback khi local dev
-  return `http://localhost:3000${endpoint}`;
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+  return `${apiUrl}${endpoint}`;
 }
