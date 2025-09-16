@@ -12,4 +12,8 @@ const PostCatalogSchema: Schema = new Schema<IPostCatalogDocument>(
   { timestamps: true }
 );
 
-export default mongoose.models.PostCatalog || mongoose.model<IPostCatalogDocument>('PostCatalog', PostCatalogSchema);
+const PostCatalog =
+  mongoose.models.PostCatalog ||
+  mongoose.model<IPostCatalogDocument>('PostCatalog', PostCatalogSchema);
+
+export default PostCatalog;

@@ -1,13 +1,14 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-export interface PostDocument extends Document {
+export interface IPostDocument extends Document {
   _id: mongoose.Types.ObjectId;
   post_catalog_id: mongoose.Types.ObjectId;
   title: string;
   content: string;
   imageUrl: string;
 }
-const PostSchema: Schema = new Schema<PostDocument>(
+
+const PostSchema: Schema = new Schema<IPostDocument>(
   {
     post_catalog_id: {
       type: Schema.Types.ObjectId,
@@ -18,8 +19,9 @@ const PostSchema: Schema = new Schema<PostDocument>(
     content: { type: String },
     imageUrl: { type: String },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
-export default mongoose.models.Post || mongoose.model<PostDocument>('Post', PostSchema);
+
+const Post = mongoose.models.Post || mongoose.model<IPostDocument>('Post', PostSchema);
+
+export default Post;
