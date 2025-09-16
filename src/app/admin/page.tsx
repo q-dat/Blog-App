@@ -7,3 +7,10 @@
 //   const initialPosts = await getAllPosts();
 //   return <ClientPostManager initialPosts={initialPosts} />;
 // }
+import React from 'react'
+
+export default function page() {
+  return (
+    <div>page</div>
+  )
+}
