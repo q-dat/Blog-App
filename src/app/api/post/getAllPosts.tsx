@@ -1,5 +1,5 @@
 import Post from '@/app/models/Post';
-
+import '@/app/models/PostCatalog';
 import { connectDB } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
 
