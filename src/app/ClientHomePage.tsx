@@ -102,8 +102,8 @@ export default function ClientHomePage({ initialPosts }: ClientPostManagerProps)
           >
             <Image width={300} height={300} src={post.imageUrl || images.FallBack} alt={post.title} className="h-[300px] w-full object-cover" />
             <div className="space-y-1 p-4">
-              <p className="text-sm font-bold text-black">Danh mục: {post.post_catalog_id.name}</p>
-              <h2 className="truncate text-xl font-semibold text-gray-900">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</h2>
+              <p className="truncate text-sm font-medium text-orange-600">Danh mục: {post.post_catalog_id.name}</p>
+              <h2 className="trun text-xl font-bold uppercase text-black">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</h2>
               <div className="line-clamp-3 text-gray-600" dangerouslySetInnerHTML={{ __html: post.content.replace(/<[^>]*>/g, '') }} />
             </div>
           </div>

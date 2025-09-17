@@ -267,7 +267,7 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
                     {/* Tiêu đề */}
                     <td className="w-full max-w-[300px] px-4 py-3">
                       <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
-                        <span className="text-base font-semibold text-gray-900">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</span>
+                        <span className="text-base font-bold text-gray-900">{post.title.charAt(0).toUpperCase() + post.title.slice(1)}</span>
                         {post.content && (
                           <button
                             onClick={() => handleOpenPostModal(post)}
