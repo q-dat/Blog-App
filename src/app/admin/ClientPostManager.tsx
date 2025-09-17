@@ -21,6 +21,10 @@ interface CatalogFormData {
 interface ClientPostManagerProps {
   initialPosts: IPost[];
 }
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+}
 export default function ClientPostManager({ initialPosts }: ClientPostManagerProps) {
   const { register: postRegister, handleSubmit: handlePostSubmit, reset: resetPost, watch, setValue: setPostValue } = useForm<PostFormData>();
   const { register: catalogRegister, handleSubmit: handleCatalogSubmit, reset: resetCatalog, setValue: setCatalogValue } = useForm<CatalogFormData>();
@@ -34,6 +38,13 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
   const [editorValue, setEditorValue] = useState('');
   const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
+  const [selectedEditorWrapper, setSelectedEditorWrapper] = useState(false);
+  // EditorWrapper
+  const openEditorWrapper = () => {
+    setSelectedEditorWrapper(!selectedEditorWrapper);
+  };
+
+  // Post modal
   const handleOpenPostModal = (post: IPost) => {
     setSelectedPost(post);
   };
@@ -225,6 +236,7 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       handleCancelEditCatalog();
+      openEditorWrapper();
     }
   };
 
@@ -376,7 +388,25 @@ export default function ClientPostManager({ initialPosts }: ClientPostManagerPro
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700">Nội dung *</label>
-            <JoditEditorWrapper value={editorValue} onChange={setEditorValue} />
+            <button
+              type="button"
+              onClick={() => openEditorWrapper()}
+              className="mx-1 rounded-md border border-black px-1 text-xs font-bold uppercase text-blue-600"
+            >
+              Xem toàn bộ
+            </button>
+            {selectedEditorWrapper && (
+              <div
+                className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black bg-opacity-50 p-2 xl:p-0"
+                onClick={handleOverlayClick}
+              >
+                <div className="h-[95vh] w-[95vw] cursor-default rounded-xl bg-white p-6" onClick={(e) => e.stopPropagation()}>
+                  <JoditEditorWrapper height={750} className="hidden xl:block" value={editorValue} onChange={setEditorValue} />
+                  <JoditEditorWrapper height={600} className="block xl:hidden" value={editorValue} onChange={setEditorValue} />
+                </div>
+              </div>
+            )}
+            <JoditEditorWrapper height={400} value={editorValue} onChange={setEditorValue} />
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700">Hình ảnh (tùy chọn)</label>

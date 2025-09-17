@@ -6,11 +6,13 @@ import dynamic from 'next/dynamic';
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
 interface Props {
+  className?: string;
+  height?: number;
   value: string;
   onChange: (value: string) => void;
 }
 
-export default function JoditEditorWrapper({ value, onChange }: Props) {
+export default function JoditEditorWrapper({ className, height, value, onChange }: Props) {
   const editor = useRef(null);
 
   const config = useMemo(
@@ -18,7 +20,7 @@ export default function JoditEditorWrapper({ value, onChange }: Props) {
       readonly: false,
       toolbarAdaptive: false,
       toolbarSticky: false,
-      height: 300,
+      height,
       buttons: [
         'source',
         '|',
@@ -69,5 +71,5 @@ export default function JoditEditorWrapper({ value, onChange }: Props) {
     []
   );
 
-  return <JoditEditor ref={editor} value={value} config={config} onBlur={(newContent) => onChange(newContent)} />;
+  return <JoditEditor className={className} ref={editor} value={value} config={config} onBlur={(newContent) => onChange(newContent)} />;
 }
