@@ -21,10 +21,7 @@ interface CatalogFormData {
 interface ClientPostManagerProps {
   initialPosts: IPost[];
 }
-interface Props {
-  value: string;
-  onChange: (value: string) => void;
-}
+
 export default function ClientPostManager({ initialPosts }: ClientPostManagerProps) {
   const { register: postRegister, handleSubmit: handlePostSubmit, reset: resetPost, watch, setValue: setPostValue } = useForm<PostFormData>();
   const { register: catalogRegister, handleSubmit: handleCatalogSubmit, reset: resetCatalog, setValue: setCatalogValue } = useForm<CatalogFormData>();
